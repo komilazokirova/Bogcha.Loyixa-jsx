@@ -11,12 +11,14 @@ import {
 } from "lucide-react";
 import useAuthStore from "../store/authStore";
 import { cn } from "../lib/utils";
+import headerBg from "../assets/Header.jpg";
+import headerBolaBg from "../assets/HeaderBola.jpg";
 
 const menuItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard, color: "text-sky", bg: "bg-sky/10" },
     { label: "Bolalar", path: "/children", icon: Users, color: "text-bubblegum", bg: "bg-bubblegum/10" },
     { label: "Guruhlar", path: "/groups", icon: UsersRound, color: "text-grass", bg: "bg-grass/10" },
-    { label: "To'lovlar", path: "/payments", icon: Wallet, color: "text-sun", bg: "bg-sun/10" },
+    { label: "To'lovlar", path: "/payments", icon: Wallet, color: "text-amber-500", bg: "bg-sun/10" },
     { label: "Xodimlar", path: "/staff", icon: Contact, color: "text-sky", bg: "bg-sky/10" },
     { label: "Davomat", path: "/attendance", icon: CalendarCheck, color: "text-bubblegum", bg: "bg-bubblegum/10" },
 ];
@@ -33,15 +35,19 @@ export default function MainLayout() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-50">
+        <div className="flex h-screen bg-cream">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r flex flex-col">
-                <div className="p-6 border-b flex items-center gap-2">
-                    <span className="text-2xl">🌈</span>
-                    <h1 className="font-display text-xl font-bold text-sky">Bog'cha CRM</h1>
+            <aside className="w-64 flex flex-col bg-white border-r border-gray-100">
+                <div className="h-20 px-6 flex items-center gap-2.5 border-b border-gray-100">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky to-bubblegum flex items-center justify-center text-lg shrink-0">
+                        🌈
+                    </div>
+                    <h1 className="font-display text-lg font-bold text-ink">
+                        Bog'cha CRM
+                    </h1>
                 </div>
 
-                <nav className="flex-1 p-4 space-y-1">
+                <nav className="flex-1 px-3 py-4 space-y-1">
                     {menuItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = location.pathname === item.path;
@@ -50,10 +56,10 @@ export default function MainLayout() {
                                 key={item.path}
                                 to={item.path}
                                 className={cn(
-                                    "flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold transition-all",
+                                    "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors",
                                     isActive
-                                        ? cn(item.bg, item.color, "scale-[1.02]")
-                                        : "text-gray-500 hover:bg-gray-100"
+                                        ? cn(item.bg, item.color)
+                                        : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                 )}
                             >
                                 <Icon size={18} className={isActive ? item.color : "text-gray-400"} />
@@ -63,17 +69,17 @@ export default function MainLayout() {
                     })}
                 </nav>
 
-                <div className="p-4 border-t space-y-1">
+                <div className="p-3 space-y-1 border-t border-gray-100">
                     <Link
                         to="/profile"
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                     >
-                        <Settings size={18} />
+                        <Settings size={18} className="text-gray-400" />
                         Sozlamalar
                     </Link>
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50"
                     >
                         <LogOut size={18} />
                         Chiqish
@@ -83,12 +89,37 @@ export default function MainLayout() {
 
             {/* Main content */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                <header className="h-16 bg-white border-b flex items-center justify-end px-6">
-                    <span className="text-sm text-gray-600">
-                        {user?.name || "Foydalanuvchi"}
-                    </span>
+                <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-end mb-5 px-8 shrink-0">
+                    <div className="flex items-center gap-2.5 bg-gray-50 rounded-full pl-3 pr-1 py-1">
+                        <span className="text-sm font-semibold text-gray-600">
+                            {user?.name || "Foydalanuvchi"}
+                        </span>
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky to-bubblegum flex items-center justify-center text-sm">
+                            🙂
+                        </div>
+                    </div>
                 </header>
-                <main className="flex-1 overflow-y-auto p-6">
+
+                <main className="flex-1 overflow-y-auto px-6 pb-6 pt-2 bg-cream">
+                    <div className="relative rounded-3xl overflow-hidden bg-white mb-6 h-40 shadow-sm">
+                        <img
+                            src={headerBolaBg}
+                            alt=""
+                            className="absolute right-0 top-0 h-full w-auto object-cover"
+                        />
+                        <div className="relative z-10 h-full flex flex-col justify-center px-8 max-w-md">
+                            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-1">
+                                🌈 Bog'cha CRM
+                            </span>
+                            <h2 className="font-display text-2xl font-bold text-ink mb-1">
+                                Xush kelibsiz{user?.name ? `, ${user.name}` : ""}!
+                            </h2>
+                            <p className="text-gray-500 text-sm">
+                                Bugun ham bolalar bilan ajoyib kun bo'lsin 🌟
+                            </p>
+                        </div>
+                    </div>
+
                     <Outlet />
                 </main>
             </div>

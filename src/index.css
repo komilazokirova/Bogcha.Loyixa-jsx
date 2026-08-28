@@ -186,3 +186,43 @@ h3,
 .animate-float-slower {
   animation: float-slower 8s ease-in-out infinite;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main h1,
+main h2,
+main h3,
+main p,
+main label {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+main h1 {
+  animation-delay: 0s;
+}
+
+main h2 {
+  animation-delay: 0.05s;
+}
+
+main h3 {
+  animation-delay: 0.1s;
+}
+
+main p {
+  animation-delay: 0.1s;
+}
+
+main label {
+  animation-delay: 0.05s;
+}
