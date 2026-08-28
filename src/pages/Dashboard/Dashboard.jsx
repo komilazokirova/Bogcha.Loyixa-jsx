@@ -15,6 +15,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import StatCard from "./StatCard";
+import headerBolaBg from "@/assets/HeaderBola.jpg";
+import useAuthStore from "@/store/authStore";
 
 // TODO: Backend tayyor bo'lgach, bu mock ma'lumotlar o'rniga
 // TanStack Query orqali /dashboard/stats va /dashboard/payments-chart dan olinadi
@@ -35,8 +37,30 @@ const mockChartData = [
 ];
 
 export default function Dashboard() {
+  const user = useAuthStore((state) => state.user);
+
   return (
     <div className="space-y-6">
+      {/* Xush kelibsiz banneri */}
+      <div className="relative rounded-3xl overflow-hidden bg-white h-40 shadow-sm">
+        <img
+          src={headerBolaBg}
+          alt=""
+          className="absolute right-0 top-0 h-full w-auto object-cover"
+        />
+        <div className="relative z-10 h-full flex flex-col justify-center px-8 max-w-md">
+          <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-1">
+            🌈 Bog'cha CRM
+          </span>
+          <h2 className="font-display text-2xl font-bold text-ink mb-1">
+            Xush kelibsiz{user?.name ? `, ${user.name}` : ""}!
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Bugun ham bolalar bilan ajoyib kun bo'lsin 🌟
+          </p>
+        </div>
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-gray-500 text-sm">Umumiy statistika</p>

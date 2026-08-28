@@ -6,6 +6,7 @@ import useAuthStore from "../store/authStore";
 import Children from "../pages/Children/Children";
 import ChildForm from "../pages/Children/ChildForm";
 import Profile from "../pages/Profile/Profile";
+import ChildProfile from "../pages/Children/ChildProfile";
 
 function PrivateRoute({ children }) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -30,6 +31,7 @@ export default function AppRouter() {
                     <Route path="/children/new" element={<ChildForm />} />
                     <Route path="/children/:id/edit" element={<ChildForm />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/children/:id" element={<ChildProfile />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/login" replace />} />
