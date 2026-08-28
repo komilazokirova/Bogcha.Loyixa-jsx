@@ -11,6 +11,7 @@ import GroupProfile from "../pages/Groups/GroupProfile";
 import Payments from "../pages/Payments/Payments";
 import Staff from "../pages/Staff/Staff";
 import Attendance from "../pages/Attendance/Attendance";
+import ChildProfile from "../pages/Children/ChildProfile";
 
 function PrivateRoute({ children }) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -33,6 +34,7 @@ export default function AppRouter() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/children" element={<Children />} />
                     <Route path="/children/new" element={<ChildForm />} />
+                    <Route path="/children/:id" element={<ChildProfile />} />
                     <Route path="/children/:id/edit" element={<ChildForm />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/groups" element={<Groups />} />

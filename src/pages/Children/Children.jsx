@@ -15,9 +15,18 @@ import {
 
 import useChildrenStore from "@/store/childrenStore";
 import { groupOptions, groupColors } from "./mockChildren";
+import { useNavigate } from "react-router-dom";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function Children() {
     const [search, setSearch] = useState("");
+    const navigate = useNavigate();
     const [selectedGroup, setSelectedGroup] = useState("Barchasi");
     const children = useChildrenStore((state) => state.children);
 
@@ -60,17 +69,18 @@ export default function Children() {
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
-                <select
-                    value={selectedGroup}
-                    onChange={(e) => setSelectedGroup(e.target.value)}
-                    className="border rounded-md px-3 text-sm bg-white"
-                >
-                    {groupOptions.map((group) => (
-                        <option key={group} value={group}>
-                            {group}
-                        </option>
-                    ))}
-                </select>
+                <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+                    <SelectTrigger className="w-40">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {groupOptions.map((group) => (
+                            <SelectItem key={group} value={group}>
+                                {group}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
 
             {/* Jadval */}
@@ -88,7 +98,11 @@ export default function Children() {
                     </TableHeader>
                     <TableBody>
                         {filteredChildren.map((child) => (
-                            <TableRow key={child.id}>
+                            <TableRow
+                                key={child.id}
+                                className="cursor-pointer hover:bg-gray-50"
+                                onClick={() => navigate(`/children/${child.id}`)}
+                            >
                                 <TableCell>
                                     {child.photoUrl ? (
                                         <img
@@ -125,7 +139,10 @@ export default function Children() {
                                         {child.paymentStatus}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-right space-x-2">
+                                <TableCell
+                                    className="text-right space-x-2"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     <Button variant="ghost" size="icon">
                                         <Pencil size={16} />
                                     </Button>

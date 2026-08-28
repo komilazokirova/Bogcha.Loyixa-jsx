@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import useAuthStore from "../store/authStore";
 import { cn } from "../lib/utils";
-import headerBg from "../assets/Header.jpg";
+
 import headerBolaBg from "../assets/HeaderBola.jpg";
 
 const menuItems = [
@@ -100,26 +100,7 @@ export default function MainLayout() {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto px-6 pb-6 pt-2 bg-cream">
-                    <div className="relative rounded-3xl overflow-hidden bg-white mb-6 h-40 shadow-sm">
-                        <img
-                            src={headerBolaBg}
-                            alt=""
-                            className="absolute right-0 top-0 h-full w-auto object-cover"
-                        />
-                        <div className="relative z-10 h-full flex flex-col justify-center px-8 max-w-md">
-                            <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-1">
-                                🌈 Bog'cha CRM
-                            </span>
-                            <h2 className="font-display text-2xl font-bold text-ink mb-1">
-                                Xush kelibsiz{user?.name ? `, ${user.name}` : ""}!
-                            </h2>
-                            <p className="text-gray-500 text-sm">
-                                Bugun ham bolalar bilan ajoyib kun bo'lsin 🌟
-                            </p>
-                        </div>
-                    </div>
-
+                <main className="flex-1 overflow-y-auto p-6 bg-cream">
                     <Outlet />
                 </main>
             </div>
