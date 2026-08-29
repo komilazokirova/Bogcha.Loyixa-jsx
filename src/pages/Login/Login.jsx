@@ -13,12 +13,23 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function Login() {
     const navigate = useNavigate();
     const login = useAuthStore((state) => state.login);
     const [serverError, setServerError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [role, setRole] = useState("admin");
+
+    const [teacherGroup, setTeacherGroup] = useState("Katta");
+    const [displayName, setDisplayName] = useState("");
 
     const {
         register,
@@ -33,7 +44,16 @@ export default function Login() {
         setLoading(true);
         try {
             await new Promise((resolve) => setTimeout(resolve, 800));
-            const mockUser = { name: "Komila", role: "admin" };
+            const roleNames = {
+                admin: "Admin",
+                director: "Direktor",
+                teacher: "Tarbiyachi",
+            };
+            const mockUser = {
+                name: displayName || roleNames[role],
+                role,
+                group: role === "teacher" ? teacherGroup : null,
+            };
             const mockToken = "test-token-12345";
             login(mockUser, mockToken);
             navigate("/dashboard");
@@ -109,6 +129,47 @@ export default function Login() {
                                 <p className="text-sm text-red-500">{errors.password.message}</p>
                             )}
                         </div>
+
+                        <div className="space-y-2">
+                            <Label>Ismingiz (test uchun)</Label>
+                            <Input
+                                placeholder="Masalan: Nodira"
+                                className="rounded-xl"
+                                value={displayName}
+                                onChange={(e) => setDisplayName(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Rol (test uchun)</Label>
+                            <Select value={role} onValueChange={setRole}>
+                                <SelectTrigger className="w-full rounded-xl">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="admin">Admin</SelectItem>
+                                    <SelectItem value="director">Direktor</SelectItem>
+                                    <SelectItem value="teacher">Tarbiyachi</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {role === "teacher" && (
+                            <div className="space-y-2">
+                                <Label>Guruhingiz (test uchun)</Label>
+                                <Select value={teacherGroup} onValueChange={setTeacherGroup}>
+                                    <SelectTrigger className="w-full rounded-xl">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Yasli">Yasli</SelectItem>
+                                        <SelectItem value="Kichik">Kichik</SelectItem>
+                                        <SelectItem value="O'rta">O'rta</SelectItem>
+                                        <SelectItem value="Katta">Katta</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        )}
 
                         {serverError && (
                             <p className="text-sm text-red-500 text-center">{serverError}</p>

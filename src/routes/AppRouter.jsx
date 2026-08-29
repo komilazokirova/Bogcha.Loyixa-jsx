@@ -17,6 +17,20 @@ function PrivateRoute({ children }) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
+function RoleRoute({ children, allowedRoles }) {
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const user = useAuthStore((state) => state.user);
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (!allowedRoles.includes(user?.role)) {
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return children;
+}
 
 export default function AppRouter() {
     return (
@@ -32,16 +46,73 @@ export default function AppRouter() {
                     }
                 >
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/children" element={<Children />} />
-                    <Route path="/children/new" element={<ChildForm />} />
-                    <Route path="/children/:id" element={<ChildProfile />} />
-                    <Route path="/children/:id/edit" element={<ChildForm />} />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/groups" element={<Groups />} />
-                    <Route path="/groups/:id" element={<GroupProfile />} />
-                    <Route path="/payments" element={<Payments />} />
-                    <Route path="/staff" element={<Staff />} />
                     <Route path="/attendance" element={<Attendance />} />
+
+                    <Route
+                        path="/children"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director", "teacher"]}>
+                                <Children />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/children/new"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <ChildForm />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/children/:id"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director", "teacher"]}>
+                                <ChildProfile />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/children/:id/edit"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <ChildForm />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/groups"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <Groups />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/groups/:id"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <GroupProfile />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/payments"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <Payments />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/staff"
+                        element={
+                            <RoleRoute allowedRoles={["admin", "director"]}>
+                                <Staff />
+                            </RoleRoute>
+                        }
+                    />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/login" replace />} />

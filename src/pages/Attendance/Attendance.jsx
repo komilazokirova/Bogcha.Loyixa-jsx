@@ -21,7 +21,7 @@ import { attendanceStatusColors } from "./mockAttendance";
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
 // Kim "boshqaruvchi" (barcha guruhlarni ko'ra oladigan) hisoblanishini shu yerda belgilaymiz
-const MANAGEMENT_ROLES = ["admin", "direktor"];
+const MANAGEMENT_ROLES = ["admin", "director"];
 
 export default function Attendance() {
     const [search, setSearch] = useState("");
