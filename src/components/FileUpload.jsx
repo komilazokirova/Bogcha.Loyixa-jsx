@@ -29,12 +29,16 @@ export default function FileUpload({ label, onChange, error }) {
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="text-sm font-medium text-ink dark:text-gray-100">
+        {label}
+      </label>
 
       {!fileName ? (
-        <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors">
-          <Upload size={20} className="text-gray-400" />
-          <span className="text-sm text-gray-500">Fayl tanlash uchun bosing</span>
+        <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Upload size={20} className="text-gray-400 dark:text-gray-500" />
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Fayl tanlash uchun bosing
+          </span>
           <input
             type="file"
             accept="image/*,.pdf"
@@ -43,14 +47,20 @@ export default function FileUpload({ label, onChange, error }) {
           />
         </label>
       ) : (
-        <div className="flex items-center justify-between border rounded-lg p-3">
+        <div className="flex items-center justify-between border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-3">
           <div className="flex items-center gap-2 overflow-hidden">
             {preview ? (
-              <img src={preview} alt="preview" className="w-10 h-10 object-cover rounded" />
+              <img
+                src={preview}
+                alt="preview"
+                className="w-10 h-10 object-cover rounded"
+              />
             ) : (
-              <FileText size={20} className="text-gray-400" />
+              <FileText size={20} className="text-gray-400 dark:text-gray-500" />
             )}
-            <span className="text-sm truncate">{fileName}</span>
+            <span className="text-sm truncate text-ink dark:text-gray-100">
+              {fileName}
+            </span>
           </div>
           <button type="button" onClick={handleRemove}>
             <X size={16} className="text-red-500" />

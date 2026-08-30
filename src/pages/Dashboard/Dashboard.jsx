@@ -15,7 +15,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import StatCard from "./StatCard";
-import headerBolaBg from "@/assets/HeaderBola.jpg";
+import headerBolaBg from "@/assets/HeaderBola.png";
 import useAuthStore from "@/store/authStore";
 import useChildrenStore from "@/store/childrenStore";
 
@@ -68,20 +68,20 @@ export default function Dashboard() {
     return (
         <div className="space-y-6">
             {/* Xush kelibsiz banneri */}
-            <div className="relative rounded-3xl overflow-hidden bg-white h-40 shadow-sm">
+            <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-gray-900 h-48 shadow-sm">
                 <img
                     src={headerBolaBg}
                     alt=""
-                    className="hidden lg:block absolute right-0 top-0 h-full w-auto object-cover"
+                    className="hidden lg:block absolute right-20 top-0 h-full w-auto object-cover"
                 />
                 <div className="relative z-10 h-full flex flex-col justify-center px-5 lg:px-8 max-w-[70%] lg:max-w-md">
-                    <span className="text-gray-400 text-xs font-semibold uppercase tracking-wide mb-1">
+                    <span className="text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">
                         🌈 Bog'cha CRM
                     </span>
-                    <h2 className="font-display text-lg lg:text-2xl font-bold text-ink mb-1">
+                    <h2 className="font-display text-lg lg:text-2xl font-bold text-ink dark:text-gray-100 mb-1">
                         Xush kelibsiz{user?.name ? `, ${user.name}` : ""}!
                     </h2>
-                    <p className="text-gray-500 text-xs lg:text-sm">
+                    <p className="text-gray-500 dark:text-gray-400 text-xs lg:text-sm">
                         Bugun ham bolalar bilan ajoyib kun bo'lsin 🌟
                     </p>
                 </div>

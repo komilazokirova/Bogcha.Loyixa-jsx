@@ -98,7 +98,7 @@ export default function Children() {
       </div>
 
       {/* Jadval */}
-      <div className="bg-white rounded-lg border">
+     <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
         <Table>
           <TableHeader>
             <TableRow>
@@ -116,7 +116,7 @@ export default function Children() {
             {filteredChildren.map((child) => (
               <TableRow
                 key={child.id}
-                className="cursor-pointer hover:bg-gray-50"
+                className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                 onClick={() => navigate(`/children/${child.id}`)}
               >
                 <TableCell>

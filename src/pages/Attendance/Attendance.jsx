@@ -115,7 +115,7 @@ export default function Attendance() {
             </div>
 
             {/* Jadval */}
-            <div className="bg-white rounded-lg border">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
                 <Table>
                     <TableHeader>
                         <TableRow>

@@ -96,7 +96,7 @@ export default function Payments() {
                 <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
-                    className="border rounded-md px-3 text-sm bg-white"
+                    className="border border-gray-200 dark:border-gray-700 rounded-md px-3 text-sm bg-white dark:bg-gray-900 text-ink dark:text-gray-100"
                 >
                     {paymentStatusOptions.map((status) => (
                         <option key={status} value={status}>
@@ -107,7 +107,7 @@ export default function Payments() {
             </div>
 
             {/* Jadval */}
-            <div className="bg-white rounded-lg border">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
                 <Table>
                     <TableHeader>
                         <TableRow>

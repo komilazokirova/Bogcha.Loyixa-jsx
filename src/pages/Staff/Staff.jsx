@@ -70,7 +70,7 @@ export default function Staff() {
                 <select
                     value={selectedPosition}
                     onChange={(e) => setSelectedPosition(e.target.value)}
-                    className="border rounded-md px-3 text-sm bg-white"
+                    className="border border-gray-200 dark:border-gray-700 rounded-md px-3 text-sm bg-white dark:bg-gray-900 text-ink dark:text-gray-100"
                 >
                     {positionOptions.map((position) => (
                         <option key={position} value={position}>
@@ -81,7 +81,7 @@ export default function Staff() {
             </div>
 
             {/* Jadval */}
-            <div className="bg-white rounded-lg border">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -95,7 +95,7 @@ export default function Staff() {
                     <TableBody>
                         {filteredStaff.map((s) => (
                             <TableRow key={s.id}>
-                                <TableCell className="font-medium">
+                                <TableCell className="font-medium text-gray-900 dark:text-gray-100">
                                     {s.firstName} {s.lastName}
                                 </TableCell>
                                 <TableCell>{s.position}</TableCell>

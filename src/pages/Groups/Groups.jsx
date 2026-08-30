@@ -71,10 +71,10 @@ export default function Groups() {
                                 </span>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <p className="text-sm text-gray-500">
-                                    Tarbiyachi: <span className="text-gray-800">{group.teacher}</span>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    Tarbiyachi: <span className="text-gray-800 dark:text-gray-200">{group.teacher}</span>
                                 </p>
-                                <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                     <Users size={14} />
                                     <span>
                                         {getChildrenCount(group.name)} / {group.capacity} bola
