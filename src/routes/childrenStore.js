@@ -1,34 +1,35 @@
-
 import { create } from "zustand";
-import { mockChildren } from "../pages/Children/mockChildren";
+import mockChildren from "../pages/Children/mockChildren";
 
 const useChildrenStore = create((set) => ({
-    children: mockChildren,
+  children: mockChildren,
 
-    // Yangi bola qo'shish
-    addChild: (child) =>
-        set((state) => ({
-            children: [child, ...state.children],
-        })),
+  isLoading: false,
+  error: null,
 
-    // Bolani o'chirish
-    removeChild: (id) =>
-        set((state) => ({
-            children: state.children.filter(
-                (child) => child.id !== id
-            ),
-        })),
+  // Yangi bola qo'shish
+  addChild: (child) =>
+    set((state) => ({
+      children: [child, ...state.children],
+    })),
 
-    // Bolani yangilash
-    updateChild: (id, updatedChild) =>
-        set((state) => ({
-            children: state.children.map((child) =>
-                child.id === id
-                    ? { ...child, ...updatedChild }
-                    : child
-            ),
-        })),
+  // Bolani o'chirish
+  removeChild: (id) =>
+    set((state) => ({
+      children: state.children.filter(
+        (child) => String(child.id) !== String(id)
+      ),
+    })),
+
+  // Bolani yangilash
+  updateChild: (id, updatedChild) =>
+    set((state) => ({
+      children: state.children.map((child) =>
+        String(child.id) === String(id)
+          ? { ...child, ...updatedChild }
+          : child
+      ),
+    })),
 }));
 
 export default useChildrenStore;
-

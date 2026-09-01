@@ -1,19 +1,25 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useAuthStore = create((set) => ({
-  user: null,
-  token: localStorage.getItem("token") || null,
-  isAuthenticated: !!localStorage.getItem("token"),
+const useAuthStore = create(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
 
-  login: (userData, token) => {
-    localStorage.setItem("token", token);
-    set({ user: userData, token, isAuthenticated: true });
-  },
+      login: (userData, token) => {
+        set({ user: userData, token, isAuthenticated: true });
+      },
 
-  logout: () => {
-    localStorage.removeItem("token");
-    set({ user: null, token: null, isAuthenticated: false });
-  },
-}));
+      logout: () => {
+        set({ user: null, token: null, isAuthenticated: false });
+      },
+    }),
+    {
+      name: "auth-storage", // localStorage'dagi kalit nomi
+    }
+  )
+);
 
 export default useAuthStore;

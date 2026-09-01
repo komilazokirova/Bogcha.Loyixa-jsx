@@ -4,7 +4,7 @@ export const mockChildren = [
     firstName: "Ali",
     lastName: "Karimov",
     birthDate: "2020-03-15",
-    group: "Katta",
+    groupId: 4, // Katta
     paymentStatus: "to'langan",
   },
   {
@@ -12,7 +12,7 @@ export const mockChildren = [
     firstName: "Malika",
     lastName: "Yusupova",
     birthDate: "2021-07-22",
-    group: "O'rta",
+    groupId: 3, // O'rta
     paymentStatus: "qarzdor",
   },
   {
@@ -20,7 +20,7 @@ export const mockChildren = [
     firstName: "Sardor",
     lastName: "Rashidov",
     birthDate: "2019-11-05",
-    group: "Katta",
+    groupId: 4, // Katta
     paymentStatus: "to'langan",
   },
   {
@@ -28,7 +28,7 @@ export const mockChildren = [
     firstName: "Dilnoza",
     lastName: "Abdullayeva",
     birthDate: "2022-01-30",
-    group: "Yasli",
+    groupId: 1, // Yasli
     paymentStatus: "qarzdor",
   },
   {
@@ -36,18 +36,23 @@ export const mockChildren = [
     firstName: "Jasur",
     lastName: "Tashkentov",
     birthDate: "2020-09-10",
-    group: "Kichik",
+    groupId: 2, // Kichik
     paymentStatus: "to'langan",
   },
 ];
 
-export const groupOptions = [
-  "Barchasi",
-  "Yasli",
-  "Kichik",
-  "O'rta",
-  "Katta",
-];
+// Guruh tanlash uchun (forma va filtrlarda ishlatiladi)
+export const groupOptions = ["Barchasi", "Yasli", "Kichik", "O'rta", "Katta"];
+
+// Guruh nomini ID orqali topish uchun yordamchi funksiya
+// (bu yerda import qilib bo'lmaydi - aylanma bog'lanish (circular import)
+// oldini olish uchun ID->nom xaritasi shu yerda takrorlanadi)
+export const groupIdByName = {
+  Yasli: 1,
+  Kichik: 2,
+  "O'rta": 3,
+  Katta: 4,
+};
 
 export const groupColors = {
   Yasli: "bg-bubblegum/15 text-bubblegum border-bubblegum/30",
