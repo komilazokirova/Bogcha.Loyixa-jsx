@@ -41,6 +41,8 @@ import useGroupsStore from "@/store/groupsStore";
 
 import { groupColors } from "./mockChildren";
 import { groupTypeColors } from "../Groups/mockGroups";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getChildrenRequest } from "@/api/childrenApi";
 
 export default function Children() {
   const [search, setSearch] = useState("");
@@ -50,8 +52,14 @@ export default function Children() {
   const navigate = useNavigate();
 
   // Zustand
-  const children = useChildrenStore((state) => state.children);
+  const { data: children = [], isLoading } = useQuery({
+    queryKey: ["children"],
+    queryFn: getChildrenRequest,
+    staleTime: 60 * 1000, // 1 daqiqa davomida "yangi" hisoblanadi, qayta so'ralmaydi
+  });
   const removeChild = useChildrenStore((state) => state.removeChild);
+
+
 
   const user = useAuthStore((state) => state.user);
   const groups = useGroupsStore((state) => state.groups);
@@ -69,8 +77,8 @@ export default function Children() {
   // Teacher faqat o'z guruhidagi bolalarni ko'radi
   const visibleChildren = isTeacher
     ? children.filter(
-        (child) => String(child.groupId) === String(teacherGroup?.id)
-      )
+      (child) => String(child.groupId) === String(teacherGroup?.id)
+    )
     : children;
 
   // Qidirish + guruh filter
@@ -164,6 +172,9 @@ export default function Children() {
           </Select>
         )}
       </div>
+      {isLoading && (
+        <p className="text-gray-500 dark:text-gray-400 text-sm">Yuklanmoqda...</p>
+      )}
 
       {/* Table */}
       <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
@@ -223,11 +234,10 @@ export default function Children() {
                     <TableCell>
                       {childGroup ? (
                         <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
-                            groupTypeColors[childGroup.name] ||
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${groupTypeColors[childGroup.name] ||
                             groupColors[childGroup.name] ||
                             ""
-                          }`}
+                            }`}
                         >
                           {childGroup.name}
                         </span>

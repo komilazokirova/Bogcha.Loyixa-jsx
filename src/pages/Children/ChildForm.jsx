@@ -426,99 +426,99 @@ export default function ChildForm() {
                                 ? "Faqat almashtirmoqchi bo'lgan fayllarni yuklang. Har bir fayl hajmi 2MB dan oshmasligi kerak"
                                 : "Har bir fayl hajmi 2MB dan oshmasligi kerak"}
                         </p>
-                    </CardHeader>
+                                   </CardHeader>
 
                     <CardContent className="space-y-4">
                         <Controller
                             name="childPhoto"
-                            control={control}
-                            render={({ field }) => (
-                                <FileUpload
-                                    label="Bolaning rasmi"
-                                    onChange={field.onChange}
-                                    error={errors.childPhoto?.message}
-                                    existingFileUrl={existingChild?.photoUrl}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="birthCertificate"
-                            control={control}
-                            render={({ field }) => (
-                                <FileUpload
-                                    label="Metrika (tug'ilganlik guvohnomasi) rasmi"
-                                    onChange={field.onChange}
-                                    error={errors.birthCertificate?.message}
-                                    existingFileUrl={existingChild?.birthCertificateUrl}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="fatherPassport"
-                            control={control}
-                            render={({ field }) => (
-                                <FileUpload
-                                    label="Otaning pasport nusxasi"
-                                    onChange={field.onChange}
-                                    error={errors.fatherPassport?.message}
-                                    existingFileUrl={existingChild?.fatherPassportUrl}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="motherPassport"
-                            control={control}
-                            render={({ field }) => (
-                                <FileUpload
-                                    label="Onaning pasport nusxasi"
-                                    onChange={field.onChange}
-                                    error={errors.motherPassport?.message}
-                                    existingFileUrl={existingChild?.motherPassportUrl}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="contract"
-                            control={control}
-                            render={({ field }) => (
-                                <FileUpload
-                                    label="Shartnoma"
-                                    onChange={field.onChange}
-                                    error={errors.contract?.message}
-                                    existingFileUrl={existingChild?.contractUrl}
-                                />
-                            )}
-                        />
-                    </CardContent>
-                </Card>
-
-                {/* BUTTONS */}
-                <div className="flex gap-3">
-                    <Button type="submit" disabled={mutation.isPending}>
-                        {mutation.isPending ? (
-                            <>
-                                <Loader2 size={16} className="mr-2 animate-spin" />
-                                Saqlanmoqda...
-                            </>
-                        ) : (
-                            "Saqlash"
+                        control={control}
+                        render={({ field }) => (
+                            <FileUpload
+                                label="Bolaning rasmi"
+                                onChange={field.onChange}
+                                error={errors.childPhoto?.message}
+                                existingFileUrl={existingChild?.photoUrl}
+                            />
                         )}
-                    </Button>
+                    />
 
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => navigate("/children")}
-                        disabled={mutation.isPending}
-                    >
-                        Bekor qilish
-                    </Button>
-                </div>
-            </form>
+                    <Controller
+                        name="birthCertificate"
+                        control={control}
+                        render={({ field }) => (
+                            <FileUpload
+                                label="Metrika (tug'ilganlik guvohnomasi) rasmi"
+                                onChange={field.onChange}
+                                error={errors.birthCertificate?.message}
+                                existingFileUrl={existingChild?.birthCertificateUrl}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="fatherPassport"
+                        control={control}
+                        render={({ field }) => (
+                            <FileUpload
+                                label="Otaning pasport nusxasi"
+                                onChange={field.onChange}
+                                error={errors.fatherPassport?.message}
+                                existingFileUrl={existingChild?.fatherPassportUrl}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="motherPassport"
+                        control={control}
+                        render={({ field }) => (
+                            <FileUpload
+                                label="Onaning pasport nusxasi"
+                                onChange={field.onChange}
+                                error={errors.motherPassport?.message}
+                                existingFileUrl={existingChild?.motherPassportUrl}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="contract"
+                        control={control}
+                        render={({ field }) => (
+                            <FileUpload
+                                label="Shartnoma"
+                                onChange={field.onChange}
+                                error={errors.contract?.message}
+                                existingFileUrl={existingChild?.contractUrl}
+                            />
+                        )}
+                    />
+                </CardContent>
+            </Card>
+
+            {/* BUTTONS */}
+            <div className="flex gap-3">
+                <Button type="submit" disabled={mutation.isPending}>
+                    {mutation.isPending ? (
+                        <>
+                            <Loader2 size={16} className="mr-2 animate-spin" />
+                            Saqlanmoqda...
+                        </>
+                    ) : (
+                        "Saqlash"
+                    )}
+                </Button>
+
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate("/children")}
+                    disabled={mutation.isPending}
+                >
+                    Bekor qilish
+                </Button>
+            </div>
+        </form>
         </div >
     );
 }
