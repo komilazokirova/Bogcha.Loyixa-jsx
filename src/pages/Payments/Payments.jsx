@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ import {
 
 import usePaymentsStore from "@/store/paymentsStore";
 import { paymentStatusOptions, paymentStatusColors } from "./mockPayments";
+import { calculatePaymentStats } from "./paymentsUtils";
 
 export default function Payments() {
     const [search, setSearch] = useState("");
@@ -37,13 +38,10 @@ export default function Payments() {
         return matchesSearch && matchesStatus;
     });
 
-    const totalCollected = payments
-        .filter((p) => p.status === "to'langan")
-        .reduce((sum, p) => sum + p.amount, 0);
-
-    const totalPending = payments
-        .filter((p) => p.status !== "to'langan")
-        .reduce((sum, p) => sum + p.amount, 0);
+    const { totalCollected, totalPending } = useMemo(
+        () => calculatePaymentStats(payments),
+        [payments]
+    );
 
     const formatSum = (num) => `${num.toLocaleString("uz-UZ")} so'm`;
 

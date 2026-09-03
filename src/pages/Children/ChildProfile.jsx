@@ -67,25 +67,25 @@ export default function ChildProfile() {
             {/* Asosiy ma'lumot kartasi */}
             <Card>
                 <CardContent className="p-6">
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                         {child.photoUrl ? (
                             <img
                                 src={child.photoUrl}
                                 alt={child.firstName}
-                                className="w-20 h-20 rounded-full object-cover cursor-pointer"
+                                className="w-32 h-32 rounded-full object-cover cursor-pointer ring-4 ring-sky/15 shrink-0"
                                 onClick={() => setPreviewImage(child.photoUrl)}
                             />
                         ) : (
-                            <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-xl text-gray-500 font-semibold">
+                            <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-3xl text-gray-500 dark:text-gray-400 font-semibold ring-4 ring-sky/15 shrink-0">
                                 {child.firstName?.[0]}
                                 {child.lastName?.[0]}
                             </div>
                         )}
                         <div className="flex-1">
-                            <h2 className="font-display text-xl font-bold text-ink">
+                            <h2 className="font-display text-xl font-bold text-ink dark:text-gray-100">
                                 {child.firstName} {child.lastName}
                             </h2>
-                            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                            <div className="flex items-center justify-center sm:justify-start gap-2 mt-1.5 flex-wrap">
                                 <span
                                     className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${groupColors[child.group] || ""
                                         }`}

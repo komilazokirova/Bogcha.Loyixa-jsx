@@ -1,13 +1,21 @@
 import { useState } from "react";
-import { Upload, X, FileText } from "lucide-react";
+import { Upload, X, FileText, RefreshCw } from "lucide-react";
 
-export default function FileUpload({ label, onChange, error }) {
+export default function FileUpload({ label, onChange, error, existingFileUrl }) {
   const [preview, setPreview] = useState(null);
   const [fileName, setFileName] = useState("");
+
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert("Fayl hajmi 2MB dan oshmasligi kerak. Iltimos, kichikroq fayl tanlang.");
+      e.target.value = "";
+      return;
+    }
 
     setFileName(file.name);
     onChange(file);
@@ -27,13 +35,40 @@ export default function FileUpload({ label, onChange, error }) {
     onChange(null);
   };
 
+  // Yangi fayl tanlanmagan, lekin tahrirlashda eski fayl mavjud bo'lsa —
+  // o'sha faylni "Joriy fayl" sifatida ko'rsatamiz, "Almashtirish" tugmasi bilan
+  const showExisting = !fileName && existingFileUrl;
+
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-ink dark:text-gray-100">
         {label}
       </label>
 
-      {!fileName ? (
+      {showExisting ? (
+        <div className="flex items-center justify-between border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-3">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <img
+              src={existingFileUrl}
+              alt="joriy fayl"
+              className="w-10 h-10 object-cover rounded"
+            />
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              Joriy fayl
+            </span>
+          </div>
+          <label className="flex items-center gap-1.5 text-xs font-medium text-sky cursor-pointer hover:underline">
+            <RefreshCw size={14} />
+            Almashtirish
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </label>
+        </div>
+      ) : !fileName ? (
         <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
           <Upload size={20} className="text-gray-400 dark:text-gray-500" />
           <span className="text-sm text-gray-500 dark:text-gray-400">
