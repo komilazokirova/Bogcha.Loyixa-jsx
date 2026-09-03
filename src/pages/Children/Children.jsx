@@ -35,14 +35,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import useChildrenStore from "@/store/childrenStore";
 import useAuthStore from "@/store/authStore";
 import useGroupsStore from "@/store/groupsStore";
 
 import { groupColors } from "./mockChildren";
 import { groupTypeColors } from "../Groups/mockGroups";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getChildrenRequest } from "@/api/childrenApi";
+
+// 1-O'ZGARISH: useMutation va deleteChildRequest ni import qildik
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getChildrenRequest, deleteChildRequest } from "@/api/childrenApi";
 
 export default function Children() {
   const [search, setSearch] = useState("");
@@ -50,38 +51,32 @@ export default function Children() {
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   const navigate = useNavigate();
+  
+  // 2-O'ZGARISH: queryClient'ni chaqirib oldik
+  const queryClient = useQueryClient();
 
-  // Zustand
   const { data: children = [], isLoading } = useQuery({
     queryKey: ["children"],
     queryFn: getChildrenRequest,
-    staleTime: 60 * 1000, // 1 daqiqa davomida "yangi" hisoblanadi, qayta so'ralmaydi
+    staleTime: 60 * 1000, 
   });
-  const removeChild = useChildrenStore((state) => state.removeChild);
-
-
 
   const user = useAuthStore((state) => state.user);
   const groups = useGroupsStore((state) => state.groups);
 
   const isTeacher = user?.role === "teacher";
-
-  // O'qituvchining guruhi
   const teacherGroup = groups.find((group) => group.name === user?.group);
 
-  // ID orqali guruhni topish
   const getGroupById = (groupId) => {
     return groups.find((group) => String(group.id) === String(groupId));
   };
 
-  // Teacher faqat o'z guruhidagi bolalarni ko'radi
   const visibleChildren = isTeacher
     ? children.filter(
       (child) => String(child.groupId) === String(teacherGroup?.id)
     )
     : children;
 
-  // Qidirish + guruh filter
   const filteredChildren = visibleChildren.filter((child) => {
     const fullName =
       `${child.firstName || ""} ${child.lastName || ""}`.toLowerCase();
@@ -95,14 +90,33 @@ export default function Children() {
     return matchesSearch && matchesGroup;
   });
 
-  // Delete confirm
+  // 3-O'ZGARISH: TanStack Query orqali optimistik o'chirish (Mutation)
+  const deleteMutation = useMutation({
+    mutationFn: deleteChildRequest,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["children"] });
+      const previousChildren = queryClient.getQueryData(["children"]);
+      queryClient.setQueryData(["children"], (old = []) =>
+        old.filter((c) => String(c.id) !== String(id))
+      );
+      return { previousChildren };
+    },
+    onError: (error, id, context) => {
+      queryClient.setQueryData(["children"], context.previousChildren);
+      toast.error("O'chirishda xatolik yuz berdi");
+    },
+    onSuccess: () => {
+      toast.success("Bola muvaffaqiyatli o'chirildi!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["children"] });
+    },
+  });
+
+  // 4-O'ZGARISH: handleDeleteConfirm endi deleteMutation'ni ishlatadi
   const handleDeleteConfirm = () => {
     if (!deleteTarget) return;
-
-    removeChild(deleteTarget.id);
-
-    toast.success("Bola muvaffaqiyatli o'chirildi!");
-
+    deleteMutation.mutate(deleteTarget.id);
     setDeleteTarget(null);
   };
 
@@ -329,8 +343,7 @@ export default function Children() {
                   <strong>
                     {deleteTarget.firstName} {deleteTarget.lastName}
                   </strong>{" "}
-                  ro'yxatdan butunlay o'chiriladi. Bu amalni ortga qaytarib
-                  bo'lmaydi.
+                  ro'yxatdan butunlay o'chiriladi. Bu amalni ortga qaytarib bo'lmaydi.
                 </>
               )}
             </AlertDialogDescription>
