@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email kiritish shart")
-    .email("Email formati noto'g'ri"),
-  password: z
-    .string()
-    .min(1, "Parol kiritish shart")
-    .min(6, "Parol kamida 6 ta belgidan iborat bo'lishi kerak"),
-});
+// Endi t() funksiyasini qabul qiladi — xatolik xabarlari tanlangan tilga mos keladi
+export const loginSchema = (t) =>
+  z.object({
+    email: z
+      .string()
+      .min(1, t("errors.emailRequired"))
+      .email(t("errors.emailFormat")),
+    password: z
+      .string()
+      .min(1, t("errors.passwordRequired"))
+      .min(6, t("errors.passwordMin")),
+  });
