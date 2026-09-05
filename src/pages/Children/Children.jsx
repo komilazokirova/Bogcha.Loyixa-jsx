@@ -41,24 +41,23 @@ import useGroupsStore from "@/store/groupsStore";
 import { groupColors } from "./mockChildren";
 import { groupTypeColors } from "../Groups/mockGroups";
 
-// 1-O'ZGARISH: useMutation va deleteChildRequest ni import qildik
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getChildrenRequest, deleteChildRequest } from "@/api/childrenApi";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function Children() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [selectedGroupId, setSelectedGroupId] = useState("Barchasi");
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   const navigate = useNavigate();
-  
-  // 2-O'ZGARISH: queryClient'ni chaqirib oldik
   const queryClient = useQueryClient();
 
   const { data: children = [], isLoading } = useQuery({
     queryKey: ["children"],
     queryFn: getChildrenRequest,
-    staleTime: 60 * 1000, 
+    staleTime: 60 * 1000,
   });
 
   const user = useAuthStore((state) => state.user);
@@ -73,24 +72,20 @@ export default function Children() {
 
   const visibleChildren = isTeacher
     ? children.filter(
-      (child) => String(child.groupId) === String(teacherGroup?.id)
-    )
+        (child) => String(child.groupId) === String(teacherGroup?.id)
+      )
     : children;
 
   const filteredChildren = visibleChildren.filter((child) => {
     const fullName =
       `${child.firstName || ""} ${child.lastName || ""}`.toLowerCase();
-
     const matchesSearch = fullName.includes(search.toLowerCase());
-
     const matchesGroup =
       selectedGroupId === "Barchasi" ||
       String(child.groupId) === String(selectedGroupId);
-
     return matchesSearch && matchesGroup;
   });
 
-  // 3-O'ZGARISH: TanStack Query orqali optimistik o'chirish (Mutation)
   const deleteMutation = useMutation({
     mutationFn: deleteChildRequest,
     onMutate: async (id) => {
@@ -103,17 +98,16 @@ export default function Children() {
     },
     onError: (error, id, context) => {
       queryClient.setQueryData(["children"], context.previousChildren);
-      toast.error("O'chirishda xatolik yuz berdi");
+      toast.error(t("children.deleteErrorToast"));
     },
     onSuccess: () => {
-      toast.success("Bola muvaffaqiyatli o'chirildi!");
+      toast.success(t("children.deletedToast"));
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["children"] });
     },
   });
 
-  // 4-O'ZGARISH: handleDeleteConfirm endi deleteMutation'ni ishlatadi
   const handleDeleteConfirm = () => {
     if (!deleteTarget) return;
     deleteMutation.mutate(deleteTarget.id);
@@ -127,21 +121,19 @@ export default function Children() {
         <div>
           <h1 className="text-2xl font-bold text-ink dark:text-gray-100">
             {isTeacher
-              ? `${user?.group || ""} guruhi bolalari`
-              : "Bolalar ro'yxati"}
+              ? t("children.groupChildren", { group: user?.group || "" })
+              : t("children.listTitle")}
           </h1>
-
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Jami: {filteredChildren.length} ta bola
+            {t("children.totalCount", { count: filteredChildren.length })}
           </p>
         </div>
 
-        {/* Yangi bola qo'shish */}
         {!isTeacher && (
           <Link to="/children/new">
             <Button>
               <Plus size={16} className="mr-2" />
-              Yangi bola qo'shish
+              {t("children.addNew")}
             </Button>
           </Link>
         )}
@@ -149,34 +141,29 @@ export default function Children() {
 
       {/* Search + Filter */}
       <div className="flex gap-3">
-        {/* Search */}
         <div className="relative flex-1 max-w-sm">
           <Search
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
-
           <Input
-            placeholder="Ism bo'yicha qidirish..."
+            placeholder={t("children.searchPlaceholder")}
             className="pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        {/* Group filter */}
         {!isTeacher && (
           <Select
             value={String(selectedGroupId)}
             onValueChange={(value) => setSelectedGroupId(value)}
           >
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="Guruh" />
+              <SelectValue placeholder={t("children.group")} />
             </SelectTrigger>
-
             <SelectContent>
-              <SelectItem value="Barchasi">Barchasi</SelectItem>
-
+              <SelectItem value="Barchasi">{t("common.all")}</SelectItem>
               {groups.map((group) => (
                 <SelectItem key={group.id} value={String(group.id)}>
                   {group.name}
@@ -186,8 +173,9 @@ export default function Children() {
           </Select>
         )}
       </div>
+
       {isLoading && (
-        <p className="text-gray-500 dark:text-gray-400 text-sm">Yuklanmoqda...</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">{t("loading")}</p>
       )}
 
       {/* Table */}
@@ -195,14 +183,13 @@ export default function Children() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Rasm</TableHead>
-              <TableHead>Ism Familiya</TableHead>
-              <TableHead>Tug'ilgan sana</TableHead>
-              <TableHead>Guruh</TableHead>
-              <TableHead>To'lov holati</TableHead>
-
+              <TableHead>{t("children.photo")}</TableHead>
+              <TableHead>{t("children.fullName")}</TableHead>
+              <TableHead>{t("children.birthDate")}</TableHead>
+              <TableHead>{t("children.group")}</TableHead>
+              <TableHead>{t("children.paymentStatus")}</TableHead>
               {!isTeacher && (
-                <TableHead className="text-right">Amallar</TableHead>
+                <TableHead className="text-right">{t("common.actions")}</TableHead>
               )}
             </TableRow>
           </TableHeader>
@@ -211,14 +198,12 @@ export default function Children() {
             {filteredChildren.length > 0 ? (
               filteredChildren.map((child) => {
                 const childGroup = getGroupById(child.groupId);
-
                 return (
                   <TableRow
                     key={child.id}
                     className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                     onClick={() => navigate(`/children/${child.id}`)}
                   >
-                    {/* Rasm */}
                     <TableCell>
                       {child.photoUrl ? (
                         <img
@@ -234,35 +219,32 @@ export default function Children() {
                       )}
                     </TableCell>
 
-                    {/* Ism */}
                     <TableCell className="font-medium text-ink dark:text-gray-100">
                       {child.firstName} {child.lastName}
                     </TableCell>
 
-                    {/* Tug'ilgan sana */}
                     <TableCell className="text-gray-600 dark:text-gray-300">
                       {child.birthDate}
                     </TableCell>
 
-                    {/* Guruh */}
                     <TableCell>
                       {childGroup ? (
                         <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${groupTypeColors[childGroup.name] ||
+                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                            groupTypeColors[childGroup.name] ||
                             groupColors[childGroup.name] ||
                             ""
-                            }`}
+                          }`}
                         >
                           {childGroup.name}
                         </span>
                       ) : (
                         <span className="text-xs text-gray-400">
-                          Belgilanmagan
+                          {t("common.none")}
                         </span>
                       )}
                     </TableCell>
 
-                    {/* To'lov */}
                     <TableCell>
                       <Badge
                         variant={
@@ -271,17 +253,15 @@ export default function Children() {
                             : "destructive"
                         }
                       >
-                        {child.paymentStatus}
+                        {t("paymentStatus." + child.paymentStatus) || child.paymentStatus}
                       </Badge>
                     </TableCell>
 
-                    {/* Actions */}
                     {!isTeacher && (
                       <TableCell
                         className="text-right space-x-2"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* Edit */}
                         <Button
                           variant="ghost"
                           size="icon"
@@ -291,17 +271,12 @@ export default function Children() {
                         >
                           <Pencil size={16} />
                         </Button>
-
-                        {/* Delete */}
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => setDeleteTarget(child)}
                         >
-                          <Trash2
-                            size={16}
-                            className="text-red-500"
-                          />
+                          <Trash2 size={16} className="text-red-500" />
                         </Button>
                       </TableCell>
                     )}
@@ -314,7 +289,7 @@ export default function Children() {
                   colSpan={isTeacher ? 5 : 6}
                   className="text-center py-10 text-gray-500"
                 >
-                  Bola topilmadi
+                  {t("children.noChild")}
                 </TableCell>
               </TableRow>
             )}
@@ -326,39 +301,30 @@ export default function Children() {
       <AlertDialog
         open={!!deleteTarget}
         onOpenChange={(open) => {
-          if (!open) {
-            setDeleteTarget(null);
-          }
+          if (!open) setDeleteTarget(null);
         }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Bolani o'chirishni tasdiqlaysizmi?
-            </AlertDialogTitle>
-
+            <AlertDialogTitle>{t("children.deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
               {deleteTarget && (
                 <>
                   <strong>
                     {deleteTarget.firstName} {deleteTarget.lastName}
                   </strong>{" "}
-                  ro'yxatdan butunlay o'chiriladi. Bu amalni ortga qaytarib bo'lmaydi.
+                  {t("children.deleteDesc")}
                 </>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
-
           <AlertDialogFooter>
-            <AlertDialogCancel>
-              Bekor qilish
-            </AlertDialogCancel>
-
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="bg-red-500 hover:bg-red-600 text-white"
             >
-              Ha, o'chirish
+              {t("children.deleteYes")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
