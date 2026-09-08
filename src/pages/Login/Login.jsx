@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import {
-  Eye, EyeOff, Mail, Lock, Loader2, ArrowRight,
+  Eye, EyeOff, Mail, Lock, Loader2, Sparkles, ArrowRight,
   ShieldCheck, Briefcase, GraduationCap,
   Users, Wallet, Contact,
 } from "lucide-react";
@@ -13,6 +13,7 @@ import { useTranslation } from "../../i18n/useTranslation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 
 const roleOptions = [
   { value: "admin", icon: ShieldCheck },
@@ -20,22 +21,10 @@ const roleOptions = [
   { value: "teacher", icon: GraduationCap },
 ];
 
-// MUHIM: klasslar TO'LIQ satr sifatida yozilgan (bo'lak-bo'lak birlashtirilmagan) —
-// Tailwind build vaqtida faqat manba kodida SO'ZMA-SO'Z uchraydigan klass
-// nomlarini generatsiya qiladi.
 const roleAccent = {
-  admin: {
-    solid: "bg-sky",
-    active: "border-transparent bg-sky/10 text-sky ring-1 ring-sky",
-  },
-  director: {
-    solid: "bg-bubblegum",
-    active: "border-transparent bg-bubblegum/10 text-bubblegum ring-1 ring-bubblegum",
-  },
-  teacher: {
-    solid: "bg-grass",
-    active: "border-transparent bg-grass/10 text-emerald-700 ring-1 ring-grass",
-  },
+  admin: { active: "bg-white text-sky border-white shadow-md" },
+  director: { active: "bg-white text-bubblegum border-white shadow-md" },
+  teacher: { active: "bg-white text-emerald-700 border-white shadow-md" },
 };
 
 const featureItems = [
@@ -92,182 +81,179 @@ export default function Login() {
     }
   };
 
-  const accent = roleAccent[role];
+  // ===== Kartaning yengil 3D "tilt" effekti (sichqoncha harakatiga qarab) =====
+  const cardRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -6, y: px * 8 });
+  }, []);
+
+  const resetTilt = useCallback(() => setTilt({ x: 0, y: 0 }), []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-[#EAF6FB]">
-      {/* ============================================================
-          FON: qog'oz-kitob uslubidagi manzara (quyosh, bulutlar, tepaliklar)
-          ============================================================ */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        viewBox="0 0 1440 900"
-        preserveAspectRatio="xMidYMax slice"
-        aria-hidden="true"
-      >
-        <rect width="1440" height="900" fill="#EAF6FB" />
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-sky via-bubblegum to-sun">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-10 -left-10 w-72 h-72 rounded-full bg-white/20 blur-sm animate-float" />
+        <div className="absolute top-1/4 -right-16 w-96 h-96 rounded-full bg-white/15 animate-float-slower" />
+        <div className="absolute bottom-0 left-1/5 w-80 h-80 rounded-full bg-white/10 animate-float-slower" />
+        <div className="absolute bottom-10 right-1/4 w-40 h-40 rounded-full bg-white/20 animate-float" />
+        <div className="absolute top-1/2 left-10 w-24 h-24 rounded-full bg-white/20 animate-float" />
+        <div className="absolute top-10 right-1/3 w-20 h-20 rounded-full bg-white/25 animate-float" />
+        <div className="absolute bottom-1/3 right-10 w-28 h-28 rounded-full bg-white/15 animate-float-slower" />
 
-        <circle cx="1230" cy="150" r="150" fill="#FDBA31" opacity="0.12" />
-        <circle cx="1230" cy="150" r="95" fill="#FDBA31" opacity="0.18" />
-        <circle cx="1230" cy="150" r="58" fill="#FDBA31" />
+        <Sparkles className="absolute top-[14%] left-[42%] text-white/40" size={22} />
+        <Sparkles className="absolute top-[65%] left-[8%] text-white/30" size={16} />
+        <Sparkles className="absolute top-[22%] right-[38%] text-white/30" size={14} />
+        <Sparkles className="absolute bottom-[12%] right-[30%] text-white/25" size={18} />
+      </div>
 
-        <g opacity="0.85">
-          <ellipse cx="220" cy="150" rx="70" ry="26" fill="#FFFFFF" />
-          <ellipse cx="270" cy="138" rx="46" ry="22" fill="#FFFFFF" />
-          <ellipse cx="175" cy="140" rx="42" ry="20" fill="#FFFFFF" />
-        </g>
-        <g opacity="0.7">
-          <ellipse cx="620" cy="90" rx="52" ry="18" fill="#FFFFFF" />
-          <ellipse cx="655" cy="82" rx="34" ry="15" fill="#FFFFFF" />
-        </g>
-
-        <path
-          d="M0,620 C180,560 340,660 520,610 C700,560 820,650 1000,600 C1180,555 1300,630 1440,590 L1440,900 L0,900 Z"
-          fill="#CDEFDD"
-        />
-        <path
-          d="M0,720 C200,660 380,760 600,710 C820,660 980,750 1180,700 C1300,670 1380,690 1440,680 L1440,900 L0,900 Z"
-          fill="#6FCF97"
-        />
-
-        <g fill="#57B682">
-          <circle cx="180" cy="705" r="26" />
-          <rect x="176" y="720" width="8" height="22" rx="3" />
-          <circle cx="1080" cy="695" r="22" />
-          <rect x="1076" y="708" width="7" height="20" rx="3" />
-        </g>
-      </svg>
-
-      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-10 px-6 py-14 lg:px-20">
-        {/* ===== Chap tomon ===== */}
-        <div className="w-full lg:w-[46%] max-w-md text-center lg:text-left">
-          <div className="inline-flex items-center gap-3 mb-6">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-3xl">
-              🌈
+      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-0 px-6 py-12 lg:px-16">
+        <div className="w-full lg:w-1/2 max-w-md text-white text-center lg:text-left">
+          <div className="flex items-center justify-center lg:justify-start gap-3 mb-6 animate-login-fade">
+            <div className="relative w-14 h-14 shrink-0">
+              <div className="absolute inset-0 rounded-2xl bg-white/30 blur-md" />
+              <div className="relative w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-sm flex items-center justify-center text-3xl shadow-lg ring-1 ring-white/40">
+                🌈
+              </div>
             </div>
-            <h1 className="font-display text-3xl font-bold text-ink">
+            <h1 className="font-display text-3xl font-bold drop-shadow">
               {t("appName")}
             </h1>
           </div>
 
-          <h2 className="font-display text-2xl sm:text-[28px] font-bold text-ink mb-3 leading-tight">
+          <h2
+            className="font-display text-2xl sm:text-4xl font-bold mb-3 leading-tight drop-shadow-sm animate-login-fade"
+            style={{ animationDelay: "0.08s" }}
+          >
             {t("login.loginTitle")}
           </h2>
-          <p className="text-ink/60 text-sm sm:text-base mb-8 leading-relaxed max-w-sm mx-auto lg:mx-0">
+          <p
+            className="text-white/90 text-sm sm:text-base mb-8 leading-relaxed max-w-sm mx-auto lg:mx-0 animate-login-fade"
+            style={{ animationDelay: "0.14s" }}
+          >
             {t("login.loginSubtitle")}
           </p>
 
           <div className="space-y-3 max-w-sm mx-auto lg:mx-0">
             {featureItems.map((item, i) => {
               const Icon = item.icon;
-              const tint = [
-                { bg: "bg-sky/15", text: "text-sky" },
-                { bg: "bg-bubblegum/15", text: "text-bubblegum" },
-                { bg: "bg-grass/20", text: "text-emerald-700" },
-              ][i % 3];
               return (
                 <div
                   key={item.key}
-                  className="flex items-center gap-3 bg-white/80 rounded-2xl px-4 py-3 text-left shadow-sm border border-ink/5"
+                  className="flex items-center gap-3 bg-white/15 backdrop-blur-sm rounded-xl px-4 py-3 text-left ring-1 ring-white/10 hover:bg-white/20 hover:translate-x-1 transition-all duration-300 animate-login-fade"
+                  style={{ animationDelay: `${0.2 + i * 0.07}s` }}
                 >
-                  <div className={`w-9 h-9 rounded-xl ${tint.bg} ${tint.text} flex items-center justify-center shrink-0`}>
-                    <Icon size={17} />
+                  <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                    <Icon size={18} />
                   </div>
-                  <span className="text-sm font-semibold text-ink/80">{t(item.key)}</span>
+                  <span className="text-sm font-medium">{t(item.key)}</span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* ===== O'ng tomon: clipboard'ga qadalgan forma ===== */}
-        <div className="w-full lg:w-[40%] flex justify-center">
-          <div className="relative w-full max-w-sm">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-5 z-20 -rotate-2">
-              <div className="w-24 h-10 rounded-xl bg-ink shadow-md flex items-center justify-center">
-                <div className="w-14 h-4 rounded-md bg-white/10" />
-              </div>
-              <div className="w-4 h-4 rounded-full bg-[#E4E0D8] border-2 border-ink/20 absolute left-1/2 -translate-x-1/2 -top-1.5" />
-            </div>
-
-            <div className="relative bg-white rounded-[26px] border-2 border-ink/10 shadow-[10px_10px_0_0_rgba(45,42,50,0.06)] px-7 pt-10 pb-8 sm:px-8">
-              <div className="text-center mb-6">
-                <h1 className="font-display text-xl font-bold text-ink">
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end" style={{ perspective: "1400px" }}>
+          <Card
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={resetTilt}
+            style={{
+              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: "transform 0.15s ease-out",
+            }}
+            className="animate-login-card w-full max-w-md shadow-2xl shadow-black/10 border border-white/25 rounded-[28px] bg-white/15 backdrop-blur-sm overflow-hidden py-0 gap-0 will-change-transform"
+          >
+            <CardContent className="p-8 sm:p-10">
+              <div className="text-center mb-7">
+                <div className="relative w-14 h-14 mx-auto mb-3">
+                  <div className="absolute inset-0 rounded-2xl bg-white/30 blur-md" />
+                  <div className="relative w-14 h-14 rounded-2xl bg-white/25 backdrop-blur-sm flex items-center justify-center text-3xl shadow-lg ring-1 ring-white/40">
+                    🌈
+                  </div>
+                </div>
+                <h1 className="font-display text-2xl font-bold text-white drop-shadow-sm">
                   {t("login.loginTitle")}
                 </h1>
-                <p className="text-ink/50 text-sm mt-1">{t("login.welcome")}</p>
+                <p className="text-white/85 text-sm mt-1">{t("login.welcome")}</p>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="space-y-1.5">
-                  <Label htmlFor="email" className="text-ink/80">
+                  <Label htmlFor="email" className="text-white font-medium">
                     {t("login.email")}
                   </Label>
                   <div className="group relative">
-                    <Mail
-                      size={16}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/30 transition-colors group-focus-within:text-sky"
-                    />
+                    <Mail size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-sky" />
                     <Input
                       id="email"
                       type="email"
                       placeholder={t("login.emailPlaceholder")}
-                      className="h-11 pl-10 rounded-xl border-ink/10 bg-[#FBFAF7] focus-visible:ring-2 focus-visible:ring-sky/40 focus-visible:border-sky/50 transition-all"
+                      className="h-12 pl-11 rounded-2xl border-0 bg-white/95 shadow-sm focus-visible:ring-2 focus-visible:ring-white/70 transition-all"
                       {...register("email")}
                     />
                   </div>
                   {errors.email && (
-                    <p className="text-xs text-red-500 pl-1">{errors.email.message}</p>
+                    <p className="text-sm text-red-100 bg-red-500/30 rounded-lg px-2 py-0.5 inline-block">{errors.email.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="password" className="text-ink/80">
+                  <Label htmlFor="password" className="text-white font-medium">
                     {t("login.password")}
                   </Label>
                   <div className="group relative">
-                    <Lock
-                      size={16}
-                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/30 transition-colors group-focus-within:text-sky"
-                    />
+                    <Lock size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-sky" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="h-11 pl-10 pr-10 rounded-xl border-ink/10 bg-[#FBFAF7] focus-visible:ring-2 focus-visible:ring-sky/40 focus-visible:border-sky/50 transition-all"
+                      className="h-12 pl-11 pr-11 rounded-2xl border-0 bg-white/95 shadow-sm focus-visible:ring-2 focus-visible:ring-white/70 transition-all"
                       {...register("password")}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ink/30 hover:text-sky transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky transition-colors cursor-pointer"
                       tabIndex={-1}
                     >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                     </button>
                   </div>
                   {errors.password && (
-                    <p className="text-xs text-red-500 pl-1">{errors.password.message}</p>
+                    <p className="text-sm text-red-100 bg-red-500/30 rounded-lg px-2 py-0.5 inline-block">{errors.password.message}</p>
                   )}
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label className="text-ink/80">{t("login.roleLabel")}</Label>
-                  <div className="grid grid-cols-3 gap-2">
+                <div className="border-t border-white/25" />
+
+                <div className="space-y-2">
+                  <Label className="text-white font-medium">{t("login.roleLabel")}</Label>
+                  <div className="grid grid-cols-3 gap-2.5">
                     {roleOptions.map((opt) => {
                       const Icon = opt.icon;
                       const isActive = role === opt.value;
-                      const optAccent = roleAccent[opt.value];
+                      const accent = roleAccent[opt.value];
                       return (
                         <button
                           key={opt.value}
                           type="button"
                           onClick={() => setRole(opt.value)}
-                          className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-2.5 text-[11px] font-semibold transition-all cursor-pointer ${
-                            isActive ? optAccent.active : "border-ink/10 text-ink/40 hover:border-ink/20"
+                          className={`flex flex-col items-center gap-2 rounded-2xl border-2 px-2 py-3.5 text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                            isActive
+                              ? `${accent.active} scale-[1.03]`
+                              : "border-white/30 bg-white/10 text-white/80 hover:bg-white/20 hover:-translate-y-0.5"
                           }`}
                         >
-                          <Icon size={16} />
+                          <span className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${isActive ? "bg-current/10" : "bg-white/15"}`}>
+                            <Icon size={17} />
+                          </span>
                           {t("role." + opt.value)}
                         </button>
                       );
@@ -276,18 +262,16 @@ export default function Login() {
                 </div>
 
                 {role === "teacher" && (
-                  <div className="space-y-1.5">
-                    <Label className="text-ink/80">{t("login.groupLabel")}</Label>
-                    <div className="grid grid-cols-4 gap-1.5">
+                  <div className="space-y-2 animate-login-fade">
+                    <Label className="text-white font-medium">{t("login.groupLabel")}</Label>
+                    <div className="grid grid-cols-4 gap-2">
                       {["Yasli", "Kichik", "O'rta", "Katta"].map((g) => (
                         <button
                           key={g}
                           type="button"
                           onClick={() => setTeacherGroup(g)}
-                          className={`rounded-lg border px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
-                            teacherGroup === g
-                              ? "border-transparent bg-bubblegum/10 text-bubblegum ring-1 ring-bubblegum"
-                              : "border-ink/10 text-ink/40 hover:border-ink/20"
+                          className={`rounded-xl border-2 px-2 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                            teacherGroup === g ? "bg-white text-bubblegum border-white shadow-md" : "border-white/30 bg-white/10 text-white/80 hover:bg-white/20"
                           }`}
                         >
                           {g}
@@ -297,18 +281,18 @@ export default function Login() {
                   </div>
                 )}
 
-                <label className="flex items-center gap-2 text-sm text-ink/60 cursor-pointer select-none pt-1">
+                <label className="flex items-center gap-2 text-sm text-white/90 cursor-pointer select-none pt-1">
                   <input
                     type="checkbox"
                     checked={remember}
                     onChange={(e) => setRemember(e.target.checked)}
-                    className="w-4 h-4 rounded border-ink/20 accent-sky"
+                    className="w-4 h-4 rounded border-white/40 accent-white"
                   />
                   {t("login.rememberMe")}
                 </label>
 
                 {serverError && (
-                  <p className="text-sm text-red-500 text-center bg-red-50 rounded-xl py-2">
+                  <p className="text-sm text-white text-center bg-red-500/40 rounded-xl py-2">
                     {serverError}
                   </p>
                 )}
@@ -316,23 +300,23 @@ export default function Login() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className={`w-full rounded-xl text-white border-0 font-display text-[15px] h-11 transition-all active:scale-[0.98] shadow-md ${accent.solid} hover:brightness-105`}
+                  className="group w-full rounded-2xl bg-white text-ink border-0 font-display text-base h-12 hover:bg-white hover:shadow-xl transition-all active:scale-[0.98] shadow-lg"
                 >
                   {loading ? (
                     <>
-                      <Loader2 size={16} className="mr-2 animate-spin" />
+                      <Loader2 size={17} className="mr-2 animate-spin" />
                       {t("login.loggingIn")}
                     </>
                   ) : (
                     <>
                       {t("login.signIn")}
-                      <ArrowRight size={16} className="ml-2" />
+                      <ArrowRight size={17} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
                 </Button>
               </form>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
