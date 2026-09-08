@@ -7,6 +7,9 @@ const usePaymentsStore = create(
     (set) => ({
       payments: mockPayments,
 
+      // Backenddan kelgan ro'yxat bilan to'liq sinxronlash (React Query natijasi)
+      setPayments: (list) => set({ payments: list }),
+
       updateStatus: (id, newStatus) =>
         set((state) => ({
           payments: state.payments.map((p) =>

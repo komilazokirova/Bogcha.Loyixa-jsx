@@ -7,6 +7,9 @@ const useGroupsStore = create(
     (set) => ({
       groups: mockGroups,
 
+      // Backenddan kelgan ro'yxat bilan to'liq sinxronlash (React Query natijasi)
+      setGroups: (list) => set({ groups: list }),
+
       addGroup: (newGroup) =>
         set((state) => ({
           groups: [

@@ -19,10 +19,20 @@ const useAttendanceStore = create(
             [key(childId, date)]: status,
           },
         })),
+
+      // Berilgan sana uchun backenddan kelgan { childId: status } obyektini
+      // mavjud records bilan birlashtiradi (boshqa sanalarni o'chirmaydi)
+      mergeDateRecords: (date, dateRecords) =>
+        set((state) => {
+          const merged = { ...state.records };
+          Object.entries(dateRecords || {}).forEach(([childId, status]) => {
+            merged[key(childId, date)] = status;
+          });
+          return { records: merged };
+        }),
     }),
     {
       name: "attendance-storage",
-      // Faqat records ma'lumotini saqlaymiz (getStatus/setStatus funksiyalar emas)
       partialize: (state) => ({ records: state.records }),
     }
   )

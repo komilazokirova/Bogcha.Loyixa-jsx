@@ -11,7 +11,7 @@ export const translations = {
             rememberMe: "Eslab qolish",
             feature1: "Bolalar va guruhlarni boshqarish",
             feature2: "To'lovlar va davomat nazorati",
-            feature3: "Xodimlar jamoasini boshqarish", welcome: "Tizimga xush kelibsiz!", email: "Email", password: "Parol", nameLabel: "Ismingiz (test uchun)", namePlaceholder: "Masalan: Nodira", roleLabel: "Rol (test uchun)", groupLabel: "Guruhingiz (test uchun)", wrongCredentials: "Email yoki parol noto'g'ri", loggingIn: "Kirilmoqda...", signIn: "Kirish"
+            feature3: "Xodimlar jamoasini boshqarish", welcome: "Tizimga xush kelibsiz!", email: "Email", emailPlaceholder: "Masalan: email@bogcha.uz", password: "Parol", nameLabel: "Ismingiz (test uchun)", namePlaceholder: "Masalan: Nodira", roleLabel: "Rol (test uchun)", groupLabel: "Guruhingiz (test uchun)", wrongCredentials: "Email yoki parol noto'g'ri", loggingIn: "Kirilmoqda...", signIn: "Kirish"
         },
         dashboard: { title: "Dashboard", welcome: "Xush kelibsiz", welcomeSubtitle: "Bugun ham bolalar bilan ajoyib kun bo'lsin", groupStats: "{group} guruhi statistikasi", generalStats: "Umumiy statistika", totalChildren: "Jami bolalar", myChildren: "Guruhimdagi bolalar", groupCount: "Guruhlar soni", myGroup: "Guruhim", paymentRate: "To'lov foizi", debtors: "Qarzdorlar", chartTitle: "Oylik to'lov dinamikasi (%)" },
         months: { Mart: "Mart", Aprel: "Aprel", May: "May", Iyun: "Iyun", Iyul: "Iyul", Avgust: "Avgust" },
@@ -73,7 +73,7 @@ export const translations = {
             rememberMe: "Запомнить меня",
             feature1: "Управление детьми и группами",
             feature2: "Контроль оплат и посещаемости",
-            feature3: "Управление сотрудниками", welcome: "Добро пожаловать в систему!", email: "Эл. почта", password: "Пароль", nameLabel: "Ваше имя (для теста)", namePlaceholder: "Например: Нодира", roleLabel: "Роль (для теста)", groupLabel: "Ваша группа (для теста)", wrongCredentials: "Неверная почта или пароль", loggingIn: "Вход...", signIn: "Войти"
+            feature3: "Управление сотрудниками", welcome: "Добро пожаловать в систему!", email: "Эл. почта",  emailPlaceholder: "Например: email@bogcha.uz", password: "Пароль", nameLabel: "Ваше имя (для теста)", namePlaceholder: "Например: Нодира", roleLabel: "Роль (для теста)", groupLabel: "Ваша группа (для теста)", wrongCredentials: "Неверная почта или пароль", loggingIn: "Вход...", signIn: "Войти"
         },
         dashboard: { title: "Дашборд", welcome: "Добро пожаловать", welcomeSubtitle: "Пусть сегодня будет отличный день с детьми", groupStats: "Статистика группы {group}", generalStats: "Общая статистика", totalChildren: "Всего детей", myChildren: "Дети в моей группе", groupCount: "Количество групп", myGroup: "Моя группа", paymentRate: "Процент оплаты", debtors: "Должники", chartTitle: "Динамика оплат за месяц (%)" },
         months: { Mart: "Март", Aprel: "Апрель", May: "Май", Iyun: "Июнь", Iyul: "Июль", Avgust: "Август" },
@@ -135,7 +135,7 @@ export const translations = {
             rememberMe: "Remember me",
             feature1: "Manage children & groups",
             feature2: "Track payments & attendance",
-            feature3: "Manage your staff team", welcome: "Welcome to the system!", email: "Email", password: "Password", nameLabel: "Your name (for testing)", namePlaceholder: "e.g. Nodira", roleLabel: "Role (for testing)", groupLabel: "Your group (for testing)", wrongCredentials: "Incorrect email or password", loggingIn: "Logging in...", signIn: "Sign in"
+            feature3: "Manage your staff team", welcome: "Welcome to the system!", email: "Email", emailPlaceholder: "e.g. email@bogcha.uz", password: "Password", nameLabel: "Your name (for testing)", namePlaceholder: "e.g. Nodira", roleLabel: "Role (for testing)", groupLabel: "Your group (for testing)", wrongCredentials: "Incorrect email or password", loggingIn: "Logging in...", signIn: "Sign in"
         },
         dashboard: { title: "Dashboard", welcome: "Welcome", welcomeSubtitle: "Have a wonderful day with the children", groupStats: "{group} group statistics", generalStats: "General statistics", totalChildren: "Total children", myChildren: "Children in my group", groupCount: "Total groups", myGroup: "My group", paymentRate: "Payment rate", debtors: "Debtors", chartTitle: "Monthly payment trend (%)" },
         months: { Mart: "March", Aprel: "April", May: "May", Iyun: "June", Iyul: "July", Avgust: "August" },

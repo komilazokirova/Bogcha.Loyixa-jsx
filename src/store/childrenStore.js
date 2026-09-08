@@ -7,24 +7,18 @@ const useChildrenStore = create(
         (set) => ({
             children: mockChildren,
 
-            addChild: (newChild) =>
-                set((state) => ({
-                    children: [newChild, ...state.children],
-                })),
+            // Backenddan kelgan ro'yxat bilan to'liq sinxronlash (React Query natijasi shu orqali keladi)
+            setChildren: (list) => set({ children: list }),
 
-            addChildOptimistic: (tempChild) =>
-                set((state) => ({
-                    children: [tempChild, ...state.children],
-                })),
-
-            addChildOptimistic: (tempChild) =>
-                set((state) => ({
-                    children: [tempChild, ...state.children],
-                })),
             // Bolani ro'yxatga qo'shish (tahrirlashda ishlatilmaydi)
             addChild: (newChild) =>
                 set((state) => ({
                     children: [newChild, ...state.children],
+                })),
+
+            addChildOptimistic: (tempChild) =>
+                set((state) => ({
+                    children: [tempChild, ...state.children],
                 })),
 
             replaceChild: (tempId, realChild) =>
@@ -60,7 +54,7 @@ const useChildrenStore = create(
                 }),
         }),
         {
-            name: "children-storage", // localStorage'dagi kalit nomi
+            name: "children-storage",
         }
     )
 );
