@@ -15,6 +15,21 @@ const useAuthStore = create(
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
       },
+
+      setRole: (role) => {
+        set((state) => {
+          if (state.user) {
+            return {
+              user: {
+                ...state.user,
+                role,
+                group: role === "teacher" ? (state.user.group || "Katta") : null,
+              },
+            };
+          }
+          return state;
+        });
+      },
     }),
     {
       name: "auth-storage", // localStorage'dagi kalit nomi
