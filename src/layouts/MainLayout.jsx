@@ -123,21 +123,21 @@ export default function MainLayout() {
             <div className="relative">
               <button
                 onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-                className="flex items-center gap-2.5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full pl-3 pr-1 py-1 text-left border border-transparent hover:border-gray-200 dark:hover:border-gray-600 transition-all cursor-pointer"
+                className="flex items-center gap-2.5 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full pl-3 pr-1 py-1 text-left border border-transparent hover:border-gray-200 dark:hover:border-gray-600 transition-none cursor-pointer"
               >
-                <div className="hidden sm:block text-right leading-tight">
-                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-100">
+                <div className="hidden sm:block text-right leading-tight transition-none">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-100 transition-none">
                     {user?.name || t("profile.user")}
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center justify-end gap-1 font-medium">
-                    <span>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center justify-end gap-1 font-medium transition-none">
+                    <span className="transition-none">
                       {t("role." + (role || "admin"))}
                       {isTeacher && user?.group ? ` • ${user.group}` : ""}
                     </span>
                     <ChevronDown size={12} className={cn("transition-transform duration-200", roleDropdownOpen && "rotate-180")} />
                   </p>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky to-bubblegum flex items-center justify-center text-sm shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky to-bubblegum flex items-center justify-center text-sm shrink-0 transition-none">
                   🙂
                 </div>
               </button>
@@ -145,33 +145,39 @@ export default function MainLayout() {
               {roleDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setRoleDropdownOpen(false)} />
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl py-1.5 z-20 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <p className="px-3 py-1 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                      {t("login.roleLabel") || "Rol tanlang"}
-                    </p>
-                    {availableRoles.map((r) => {
-                      const Icon = r.icon;
-                      const isActive = role === r.value;
-                      return (
-                        <button
-                          key={r.value}
-                          onClick={() => {
-                            setRole(r.value);
-                            setRoleDropdownOpen(false);
-                            navigate("/dashboard");
-                          }}
-                          className={cn(
-                            "w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-left transition-colors cursor-pointer",
-                            isActive
-                              ? "bg-sky/10 text-sky dark:bg-sky/20"
-                              : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                          )}
-                        >
-                          <Icon size={14} className={cn(isActive ? "text-sky" : "text-gray-400")} />
-                          {r.label}
-                        </button>
-                      );
-                    })}
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl py-2 z-20 animate-in fade-in slide-in-from-top-2 duration-150 transition-none">
+                    {/* Foydalanuvchi ma'lumoti */}
+                    <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-800 transition-none">
+                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-100 transition-none">
+                        {user?.name || t("profile.user")}
+                      </p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 transition-none">
+                        {t("role." + (role || "admin"))}
+                        {isTeacher && user?.group ? ` • ${user.group}` : ""}
+                      </p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setRoleDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-left text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <Settings size={14} className="text-gray-400" />
+                        {t("nav.settings") || "Profil"}
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          setRoleDropdownOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                      >
+                        <LogOut size={14} className="text-red-500" />
+                        {t("nav.logout") || "Chiqish"}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
