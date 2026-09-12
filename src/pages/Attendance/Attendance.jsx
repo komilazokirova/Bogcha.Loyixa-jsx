@@ -18,10 +18,10 @@ import useAttendanceStore from "@/store/attendanceStore";
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
 const groupColorMap = {
-  Yasli: "bg-bubblegum/15 text-bubblegum",
-  Kichik: "bg-sun/15 text-amber-600",
-  "O'rta": "bg-grass/15 text-emerald-700",
-  Katta: "bg-sky/15 text-sky",
+  B1: "bg-bubblegum/15 text-bubblegum",
+  B2: "bg-sun/15 text-amber-600",
+  B3: "bg-grass/15 text-emerald-700",
+  B4: "bg-sky/15 text-sky",
 };
 
 function StatCard({ icon: Icon, label, value, color }) {

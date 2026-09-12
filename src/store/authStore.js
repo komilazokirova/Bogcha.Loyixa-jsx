@@ -23,7 +23,7 @@ const useAuthStore = create(
               user: {
                 ...state.user,
                 role,
-                group: role === "teacher" ? (state.user.group || "Katta") : null,
+                group: role === "teacher" ? (state.user.group || "B4") : null,
               },
             };
           }

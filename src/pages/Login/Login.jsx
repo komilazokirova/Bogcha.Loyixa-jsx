@@ -41,7 +41,7 @@ export default function Login() {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("admin");
-  const [teacherGroup, setTeacherGroup] = useState("Katta");
+  const [teacherGroup, setTeacherGroup] = useState("B4");
   const [displayName, setDisplayName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -265,7 +265,7 @@ export default function Login() {
                   <div className="space-y-2 animate-login-fade">
                     <Label className="text-white font-medium">{t("login.groupLabel")}</Label>
                     <div className="grid grid-cols-4 gap-2">
-                      {["Yasli", "Kichik", "O'rta", "Katta"].map((g) => (
+                      {["B1", "B2", "B3", "B4"].map((g) => (
                         <button
                           key={g}
                           type="button"
